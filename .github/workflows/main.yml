@@ -1,0 +1,44 @@
+# read: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          # will assign a random free host port
+          - 27017/tcp
+        env:
+          MONGO_INITDB_ROOT_USERNAME: yannick
+          MONGO_INITDB_ROOT_PASSWORD: 123456
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Cargo
+        uses: actions-rs/cargo@v1
+
+      - name: Build
+        run: cargo build
+
+      - name: Test
+        env:
+          MONGODB_HOST: localhost
+          MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }} # get randomly assigned published port
+        run: |
+          chmod +x test/test.sh
+          ./test/test.sh $MONGODB_HOST $MONGODB_PORT
