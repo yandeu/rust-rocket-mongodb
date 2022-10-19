@@ -7,7 +7,7 @@ mod repository;
 mod tests;
 
 use api::auth::get_jwt;
-use api::user_api::{create_user, delete_user, get_all_users, get_user, update_user};
+use api::user::{create_user, delete_user, get_all_users, get_user, update_user};
 use repository::mongodb_repo::MongoRepo;
 
 #[macro_use]
