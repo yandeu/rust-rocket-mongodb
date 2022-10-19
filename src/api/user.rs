@@ -8,7 +8,7 @@ use mongodb::results::InsertOneResult;
 use rocket::{http::Status, serde::json::Json, State};
 use struct_helpers::rocket::guard::HelpersGuard;
 
-#[get("/user/<id>")]
+#[get("/<id>")]
 pub async fn get_user(db: &State<MongoRepo>, id: MongoId) -> Result<Json<User>, Status> {
     let user_detail = db.get_user(&id.to_string()).await;
     match user_detail {
@@ -17,7 +17,7 @@ pub async fn get_user(db: &State<MongoRepo>, id: MongoId) -> Result<Json<User>, 
     }
 }
 
-#[post("/user", data = "<new_user>")]
+#[post("/", data = "<new_user>")]
 pub async fn create_user(
     db: &State<MongoRepo>,
     new_user: HelpersGuard<Json<UserName>>,
@@ -31,7 +31,7 @@ pub async fn create_user(
     }
 }
 
-#[patch("/user/<id>", data = "<new_user>")]
+#[patch("/<id>", data = "<new_user>")]
 pub async fn update_user(
     db: &State<MongoRepo>,
     id: MongoId,
@@ -55,7 +55,7 @@ pub async fn update_user(
     return Err(Status::NotFound);
 }
 
-#[delete("/user/<id>")]
+#[delete("/<id>")]
 pub async fn delete_user(
     db: &State<MongoRepo>,
     id: MongoId,
@@ -74,7 +74,7 @@ pub async fn delete_user(
     }
 }
 
-#[get("/user")]
+#[get("/")]
 pub async fn get_all_users(db: &State<MongoRepo>) -> Result<Json<Vec<User>>, Status> {
     let users = db.get_all_users().await;
     match users {

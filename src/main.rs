@@ -29,7 +29,7 @@ async fn rocket() -> Rocket<Build> {
         .manage(db)
         .mount("/", routes![hello])
         .mount(
-            "/",
+            "/users",
             routes![
                 create_user,
                 get_user,
@@ -38,5 +38,5 @@ async fn rocket() -> Rocket<Build> {
                 get_all_users
             ],
         )
-        .mount("/jwt", routes![get_jwt])
+        .mount("/auth", routes![get_jwt])
 }

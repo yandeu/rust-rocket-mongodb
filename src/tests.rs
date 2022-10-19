@@ -97,7 +97,7 @@ mod tests {
 
         let resp = post_json(
             &client,
-            "http://localhost:8000/user".to_string(),
+            "http://localhost:8000/users".to_string(),
             serialize(&new_user),
         )
         .await;
@@ -109,20 +109,20 @@ mod tests {
         let user_id = v.inserted_id.oid;
         let resp = get_json(
             &client,
-            format!("http://localhost:8000/user/{}", &user_id),
+            format!("http://localhost:8000/users/{}", &user_id),
             serialize(&new_user),
         )
         .await;
         let v = deserialize::<User>(&resp);
         assert_eq!(v.name.unwrap(), "yannick".to_string());
 
-        let jwt_res = get_json(&client, "http://localhost:8000/jwt".into(), "".into()).await;
+        let jwt_res = get_json(&client, "http://localhost:8000/auth/jwt".into(), "".into()).await;
         let jwt = deserialize::<JWT>(&jwt_res);
         let token = jwt.token;
 
         // delete client (using jwt token)
         let deleted: String = client
-            .delete(format!("http://localhost:8000/user/{}", &user_id))
+            .delete(format!("http://localhost:8000/users/{}", &user_id))
             .header("Authorization", token)
             .send()
             .await
