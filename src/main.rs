@@ -22,7 +22,7 @@ fn hello() -> Result<Json<String>, Status> {
 
 #[launch]
 async fn rocket() -> Rocket<Build> {
-    print!("starting...");
+    println!("starting...");
 
     let db = MongoRepo::init().await;
     rocket::build()

@@ -22,10 +22,10 @@ use admin
 db.createUser({user:"yannick", pwd: "123456", roles: ["userAdminAnyDatabase"] })
 ```
 
-### Start server
+### Start server (and watch for changes)
 
 ```console
-cargo watch -x run
+cargo build; cargo watch -q -c -x run
 ```
 
 ## Testing
