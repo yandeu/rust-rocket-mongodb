@@ -59,12 +59,12 @@ impl<'r> FromRequest<'r> for Auth {
 
         let token = match req.headers().get("authorization").next() {
             Some(a) => a,
-            _ => return Outcome::Failure((Status::BadRequest, "Authorization header not found")),
+            _ => return Outcome::Error((Status::BadRequest, "Authorization header not found")),
         };
 
         let validate = jwt_validate(token);
         if !validate {
-            return Outcome::Failure((Status::Unauthorized, "User is not authorized"));
+            return Outcome::Error((Status::Unauthorized, "User is not authorized"));
         }
 
         // println!("Token {:?}", token);
