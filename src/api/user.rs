@@ -52,7 +52,7 @@ pub async fn update_user(
         }
     }
 
-    return Err(Status::NotFound);
+    Err(Status::NotFound)
 }
 
 #[delete("/<id>")]
@@ -65,9 +65,9 @@ pub async fn delete_user(
     match result {
         Ok(res) => {
             if res.deleted_count == 1 {
-                return Ok(Json("User successfully deleted!"));
+                Ok(Json("User successfully deleted!"))
             } else {
-                return Err(Status::NotFound);
+                Err(Status::NotFound)
             }
         }
         Err(_) => Err(Status::InternalServerError),

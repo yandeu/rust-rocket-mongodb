@@ -20,7 +20,7 @@ impl MongoRepo {
 
         let mut uri = match env::var("MONGOURI") {
             Ok(v) => v.to_string(),
-            Err(_) => format!("Error loading env variable"),
+            Err(_) => "Error loading env variable".to_string(),
         };
 
         let host = env::var("MONGODB_HOST").unwrap_or("localhost".to_string());
@@ -57,7 +57,6 @@ impl MongoRepo {
             .col
             .find_one(filter, None)
             .await
-            .ok()
             .expect("Error getting user's detail");
         Ok(user_detail.unwrap())
     }
@@ -78,7 +77,6 @@ impl MongoRepo {
             .col
             .update_one(filter, new_doc, None)
             .await
-            .ok()
             .expect("Error updating user");
         Ok(updated_doc)
     }
@@ -90,7 +88,6 @@ impl MongoRepo {
             .col
             .delete_one(filter, None)
             .await
-            .ok()
             .expect("Error deleting user");
         Ok(user_detail)
     }

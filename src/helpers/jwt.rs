@@ -37,18 +37,18 @@ pub fn jwt_sign(user: &str) -> String {
 pub fn jwt_validate(token: &str) -> bool {
     let t = token.replace("Bearer ", "");
 
-    match decode::<Claims>(
-        &t,
-        &DecodingKey::from_secret("secret".as_ref()),
-        &Validation::default(),
-    ) {
-        Ok(_t) => return true,
-        _ => return false,
-    };
+    matches!(
+        decode::<Claims>(
+            &t,
+            &DecodingKey::from_secret("secret".as_ref()),
+            &Validation::default(),
+        ),
+        Ok(_t)
+    )
 }
 
 #[derive(Debug)]
-pub struct Auth(bool);
+pub struct Auth();
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for Auth {
@@ -68,6 +68,6 @@ impl<'r> FromRequest<'r> for Auth {
         }
 
         // println!("Token {:?}", token);
-        Outcome::Success(Auth(true))
+        Outcome::Success(Auth())
     }
 }

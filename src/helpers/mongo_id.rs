@@ -1,12 +1,13 @@
 use regex::Regex;
 use rocket::request::FromParam;
+use std::fmt;
 
 #[derive(Clone)]
 pub struct MongoId(String);
 
-impl MongoId {
-    pub fn to_string(&self) -> String {
-        self.clone().0
+impl fmt::Display for MongoId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.clone().0)
     }
 }
 
@@ -17,7 +18,7 @@ impl<'a> FromParam<'a> for MongoId {
         let re = Regex::new(r"^[a-f0-9]{24}$").unwrap();
         let m = re.is_match(param);
 
-        if m == true {
+        if m {
             let p = MongoId(param.to_string());
             Ok(p)
         } else {
