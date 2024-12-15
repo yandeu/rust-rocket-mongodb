@@ -20,4 +20,4 @@ struct-helpers = { git = "https://github.com/yandeu/struct-helpers.git", feature
 version = "3"
 
 [dev-dependencies]
-reqwest = "0.11"
+reqwest = "0.12"
