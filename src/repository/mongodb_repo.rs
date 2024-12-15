@@ -39,7 +39,7 @@ impl MongoRepo {
 
 impl MongoRepo {
     pub async fn create_user(&self, new_user: User) -> Result<InsertOneResult, Box<dyn Error>> {
-        let user = match self.col.insert_one(new_user, None).await {
+        let user = match self.col.insert_one(new_user).await {
             Ok(u) => u,
             Err(e) => {
                 print!("{}", e);
@@ -55,7 +55,7 @@ impl MongoRepo {
         let filter = doc! {"_id": obj_id};
         let user_detail = self
             .col
-            .find_one(filter, None)
+            .find_one(filter)
             .await
             .expect("Error getting user's detail");
         Ok(user_detail.unwrap())
@@ -75,7 +75,7 @@ impl MongoRepo {
         let new_doc = doc! { "$set": doc };
         let updated_doc = self
             .col
-            .update_one(filter, new_doc, None)
+            .update_one(filter, new_doc)
             .await
             .expect("Error updating user");
         Ok(updated_doc)
@@ -86,14 +86,15 @@ impl MongoRepo {
         let filter = doc! {"_id": obj_id};
         let user_detail = self
             .col
-            .delete_one(filter, None)
+            .delete_one(filter)
             .await
             .expect("Error deleting user");
         Ok(user_detail)
     }
 
     pub async fn get_all_users(&self) -> Result<Vec<User>, Box<dyn Error>> {
-        let users: Vec<User> = match self.col.find(None, None).await {
+        let query = doc! {};
+        let users: Vec<User> = match self.col.find(query).await {
             Ok(cursors) => cursors.map(|doc| doc.unwrap()).collect().await,
             Err(_e) => {
                 println!("ERROR: Error getting list of users");

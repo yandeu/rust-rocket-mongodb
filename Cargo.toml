@@ -17,7 +17,7 @@ chrono = "0.4.22"
 struct-helpers = { git = "https://github.com/yandeu/struct-helpers.git", features = [ "rocket" ] }
 
 [dependencies.mongodb]
-version = "2.3"
+version = "3"
 
 [dev-dependencies]
 reqwest = "0.11"
