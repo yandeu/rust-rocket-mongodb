@@ -18,7 +18,7 @@ impl MongoRepo {
     pub async fn init() -> Self {
         dotenv().ok();
 
-        let mut uri = match env::var("MONGOURI") {
+        let mut uri = match env::var("MONGODB_URI") {
             Ok(v) => v.to_string(),
             Err(_) => "Error loading env variable".to_string(),
         };
